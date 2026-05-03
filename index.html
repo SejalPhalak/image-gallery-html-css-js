@@ -1,81 +1,162 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Gallery</title>
-  <style>
-    .gallary-img{
-      width: 300px;
-      height: 380px;
-      object-fit: cover;
-      background-color: tomato;
-      display: block;
-      margin: 20px auto;
-      border-radius: 10px;
-    }
-    .btn-container{
-      position: relative;
-      width: 300px;
-      border: 2px solid #000;
-      display: block;
-      margin: 15px auto;
-      border-radius: 10px;
-      padding: auto 20px;
-    }
-    .btn{
-      height: 30px;
-      margin: 0 10px;
-      cursor: pointer;
-      background-color: #fff;
-      border-radius: 50%;
-    position: absolute;
-      top: 180px;
-    }
-    .btn-left{
-      left: -30px;
-    }
+<html>
 
-    .btn-right{
-      right: -30px;
-    }
-  </style>
+<head>
+    <title>Teddy Gallery</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #4c4c4c, #cfdef3);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .gallery-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-img {
+            width: 290px;
+            height: 370px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .btn {
+            font-size: 18px;
+            margin: 10px;
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #4a69bd;
+            color: white;
+            border-radius: 50%;
+        }
+
+        .btn:hover {
+            background-color: #1e3799;
+        }
+
+        #title {
+            margin-top: 10px;
+            color: #222;
+        }
+
+        #description {
+            color: #555;
+            font-size: 14px;
+        }
+
+        #extra {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .gallery-preview {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .preview-img {
+            width: 70px;
+            height: 70px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 6px;
+            border: 2px solid transparent;
+        }
+
+        .preview-img:hover {
+            border: 2px solid #4a69bd;
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="btn-container">
-  <img src="./img1.jpg" class="gallary-img" id="img"/>
-  <img src="./left-arrow.png" class="btn btn-left" onclick="prev()" />
-  <img src="./right.png" class="btn btn-right" onclick="next()" />
-</div>
+    <div class="container">
 
-<script>
-  const imagesArr = [
-    "./img1.jpg",
-    "./img2.jpg",
-    "./img3.jpeg",
-    "./img4.jpeg",
- 
-  ];
-  let imgIndex = 0;
-  
-  const imgElement = document.getElementById('img');
+        <h1>🧸 Teddy Gallery 🧸</h1>
 
-  function prev(){
-    if (imgIndex == 0) {
-      imgIndex = imagesArr.length - 1;
-    } else {
-      imgIndex--;
-    }
-    imgElement.src = imagesArr[imgIndex];
-  }
-  function next(){
-    if (imgIndex == imagesArr.length - 1) {
-      imgIndex = 0;
-    } else {
-      imgIndex++;
-    }
-    imgElement.src = imagesArr[imgIndex];
-  }
-</script>
+        <div class="gallery-container">
+            <button class="btn" onclick="slideLeft()">❮</button>
+
+            <img id="mainImage" class="main-img">
+
+            <button class="btn" onclick="slideRight()">❯</button>
+        </div>
+
+        <h2 id="title"></h2>
+        <p id="description"></p>
+        <p id="extra"></p>
+
+        <div class="gallery-preview" id="gallery-preview"></div>
+
+    </div>
+
+    <script>
+        const IMAGES = [
+            { url: "img1.jpg", title: "Teddy Bear", description: "Cute and cuddly.", rating: 4.9 },
+            { url: "img2.jpg", title: " PinkTeddy", description: "Classic favorite.", rating: 4.8 },
+            { url: "img3.jpeg", title: "Blue Teddy", description: "Soft and fluffy.", rating: 4.7 },
+            { url: "img4.jpeg", title: "Brown Teddy", description: "Sweet and adorable.", rating: 4.6 }
+        ];
+
+        let currentIndex = 0;
+
+        function showImage() {
+            const img = IMAGES[currentIndex];
+
+            document.getElementById("mainImage").src = img.url;
+            document.getElementById("title").innerText = img.title;
+            document.getElementById("description").innerText = img.description;
+            document.getElementById("extra").innerText = "⭐ Rating: " + img.rating;
+        }
+
+        function slideLeft() {
+            currentIndex = (currentIndex - 1 + IMAGES.length) % IMAGES.length;
+            showImage();
+        }
+
+        function slideRight() {
+            currentIndex = (currentIndex + 1) % IMAGES.length;
+            showImage();
+        }
+
+        function createPreview() {
+            const container = document.getElementById("gallery-preview");
+
+            IMAGES.forEach((img, i) => {
+                container.innerHTML += `<img src="${img.url}" class="preview-img" onclick="currentIndex=${i}; showImage()">`;
+            });
+        }
+
+        createPreview();
+        showImage();
+    </script>
+
 </body>
+
 </html>
